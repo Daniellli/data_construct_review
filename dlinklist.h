@@ -29,7 +29,7 @@ void choose_menu() ;
 
 bool is_empty(DLinkList ls);
 
-bool print_all();
+bool print_all(DLinkList ls);
 
 
 bool input_some_value();

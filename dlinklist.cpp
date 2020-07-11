@@ -4,29 +4,90 @@
 DLinkList dls;
 
 
-int main(){
-	
-	
-	
-	
-return 0;	
+int main() {
+	choose_menu();
+	return 0;
 }
 
 
 bool init_list() {
+	dls = (DLinkList)malloc(sizeof(DNode));
+	dls->prior=dls->next=dls;
+	return true;
 
-dls = (DLinkList)malloc(sizeof(DNode));
-dls->prior=dls->next=NULL;
-return true;
-
-} 
-bool is_empty(DLinkList ls){
+}
+bool is_empty(DLinkList ls) {
 	return ls==NULL;
 }
 
-bool input_some_value(){
+bool input_some_value() {
+
 	if(is_empty(dls))
-return false;	
+		return false;
+	DNode *t;
+	DNode *p = dls;
+	ElemType x;
+	cout<<"请输入:\n";
+	cin>>x;
+
+	while(x!=-1) {
+		t = (DNode *)malloc(sizeof(DNode));
+		t->data=x;
+		if(p->next == p->prior) { //first
+			t->next = NULL;
+			t->prior = p;
+			p->next  = t;
+			p=t;
+		} else {
+//			t->next  = p->next->next;
+//			t->prior = p->next;
+//			p->next->next = t;
+//			p->next=p->next->next;
+			t->prior =p;
+			t->next = p->next;
+			p->next = t;
+			p=t;
+
+		}
+		cin>>x;
+	}
+	return true;
+}
+
+//bool inserts(DLinkList dls,ElemType x) {
+//	if(is_empty(dls))
+//		return false;
+//
+//	DNode *tmp = (DNode *)malloc(sizeof(DNode)),p = dls;
+
+//	tmp->data = x;
+//	if(dls->next == dls->prior){//空表插入
+//		tmp ->next = NULL;
+//		p->next =  tmp;
+//		tmp->prior = p;
+//	}else{
+//		p->next = tmp;
+//		tmp->prior = p
+//	}
+//	tmp.next = p->next;
+//	p->next.prior = tmp;
+//
+//	tmp->prior = p;
+//	p->next =s;
+//	return true;
+//}
+
+bool print_all(DLinkList ls) {
+	if(ls->next == ls->prior)
+		return false;
+	DNode *p = ls->prior->next;//指向第一个节点
+
+	while(!is_empty(p)) {
+		cout<<p->data<<"\t"	;
+		p=p->next;
+	}
+	cout<<"\n";
+	return true;
 }
 
 int print_menu() {
@@ -41,8 +102,6 @@ int print_menu() {
 	cout<<"插入节点请输入:5 \n";
 	cout<<"删除节点请输入:6 \n";
 	cout<<"表长请输入:7 \n";
-
-
 	cout<<"退出请输入:0 \n";
 
 	for(int i = 0 ; i<=30; i++)
@@ -64,9 +123,9 @@ void choose_menu() {
 				init_list();
 				input_some_value();
 				break;
-//			case 2:
-//				print_all(ls);
-//				break;
+			case 2:
+				print_all(dls);
+				break;
 //			case 3:
 //				cout<<"what is the rank :\n";
 //				cin>>t1;
