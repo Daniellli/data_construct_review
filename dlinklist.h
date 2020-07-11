@@ -1,0 +1,37 @@
+#ifndef _double_link_h
+#define _double_link_h
+
+
+#include"iostream"
+#include"algorithm"
+
+using namespace std;
+
+
+
+
+
+#define ElemType int
+
+typedef struct  DNode
+ {
+	ElemType data;
+	struct  DNode *prior,*next;
+}DNode ,*DLinkList;
+
+
+int print_menu() ;
+
+bool init_list() ;
+
+void choose_menu() ;
+
+
+bool is_empty(DLinkList ls);
+
+bool print_all();
+
+
+bool input_some_value();
+
+#endif
