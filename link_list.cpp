@@ -122,8 +122,34 @@ void print_one(LNode *node) {
 }
 
 
+bool input_values_without_head(LinkList &ls) {
 
-bool init_list() {
+
+	ElemType x;
+	LNode *t,*p= ls;;
+	cout<<"input :\n";
+
+	cin>>x;
+
+	while(x!=-1) {
+		t=(LNode*)malloc(sizeof(LNode));
+		t->data =x;
+		if(p==NULL) { //第一个节点
+			ls=t;
+			t->next = NULL;
+			p=t;
+		} else {
+			t->next = p->next;
+			p->next=t;
+			p=p->next;
+		}
+		cin>>x;
+	}
+}
+
+
+
+bool init_list(LinkList &ls) {
 	ls = (LinkList)malloc(sizeof(LNode));
 	ls->data=0;
 	ls->next= NULL;
@@ -131,6 +157,16 @@ bool init_list() {
 }
 
 
+void print_wihout_head(LinkList ls) {
+	LNode *p = ls;
+	while(!is_empty(p)) {
+		cout<<p->data<<"\t";
+		p=p->next;
+	}
+
+	cout<<"\n";
+
+}
 bool print_all(LinkList ls) {
 	LinkList p = ls->next;
 	while(p!=NULL) {
@@ -167,7 +203,7 @@ bool input_some_value_from_head() {
 	return true;
 }
 
-bool input_some_value() {
+bool input_some_value(LinkList &ls) {
 	if(is_empty(ls))
 		return false;
 	//指向头指针
@@ -186,7 +222,7 @@ bool input_some_value() {
 		p=p->next;//指向下一个
 		cin>>x;
 	}
-
+	return true;
 
 }
 int print_menu() {
@@ -201,7 +237,8 @@ int print_menu() {
 	cout<<"插入节点请输入:5 \n";
 	cout<<"删除节点请输入:6 \n";
 	cout<<"表长请输入:7 \n";
-
+	cout<<"2.1题 请输入8\n";
+	cout<<"2.2题 请输入9\n";
 
 	cout<<"退出请输入:0 \n";
 
@@ -213,14 +250,32 @@ int print_menu() {
 }
 
 
+bool delete_value_2_2(LinkList &ls,ElemType v) {
+
+	LNode *p = ls,*q;
+
+	while(p->next) {
+
+		if(p->next->data == v) {
+			//删除该节点
+			q =p->next;
+			p->next = p->next->next;
+			free(q);
+		} else {
+			p=p->next;
+		}
+	}
+
+	return true;
+}
 void choose_menu() {
 	int user_input,t1,t2,res;
-
+	LinkList ls2=NULL;
 	user_input=print_menu();
 	while(user_input!=0) {
 		switch(user_input) {
 			case 1:
-				init_list();
+				init_list(ls);
 				input_some_value_from_head();
 				break;
 			case 2:
@@ -250,18 +305,56 @@ void choose_menu() {
 				break;
 			case 7:
 				cout<<size(ls)<<"\n";
+				break;
+			case 8:
+				//2.1
+				input_values_without_head(ls2);
+				print_wihout_head(ls2);
+				cout<<"请输入要删除的数值:\n";
+				cin>>t2;
+				delete_value_2_1(ls2,t2);
+				cout<<"after delete:\n ";
+				print_wihout_head(ls2);
+				break;
+			case 9:
+				//2.2
+				cout<<"请输入要删除的数值:\n";
+				cin>>t2;
+				delete_value_2_2(ls,t2);
+				cout<<"after delete:\n ";
+				print_all(ls);
+				break;
+
+
 
 		}
 		user_input=print_menu();
 	}
 }
 
-
+//递归删除ls中的v
+bool delete_value_2_1(LinkList &ls,ElemType v) {
+	if(is_empty(ls))
+		return false;
+	LNode *p;
+	if(ls->data == v) {
+		p=ls;
+		ls=ls->next;
+		free(p);
+		delete_value_2_1(ls,v);
+	} else {
+		delete_value_2_1(ls->next,v);
+	}
+	return true;
+}
 
 
 int main() {
 
 	choose_menu();
+
+
+
 	return 0;
 }
 

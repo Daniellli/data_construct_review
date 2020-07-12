@@ -13,17 +13,19 @@ using namespace std;
 typedef struct LNode {
 	ElemType data;
 	struct LNode *next;
-} LNode,*LinkList;
+ } LNode,*LinkList;
 
 
 
 int print_menu() ;
-bool input_some_value();
+bool input_some_value(LinkList &ls) ;
 
 bool input_some_value_from_head();
 
+bool input_values_without_head(LinkList &ls);
 
-bool init_list() ;
+
+bool init_list(LinkList &ls); 
 
 
 void choose_menu() ;
@@ -47,9 +49,14 @@ LNode * find_front_node(LinkList ls,LNode *node) ;
 void print_one(LNode *node);
 
 
-
-
 int size(LinkList ls);
+
+bool delete_value_2_1(LinkList &ls,ElemType v);
+
+bool delete_value_2_2(LinkList &ls,ElemType v);
+
+void print_wihout_head(LinkList ls);
+
 #endif
 
 
