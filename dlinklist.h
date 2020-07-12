@@ -13,11 +13,10 @@ using namespace std;
 
 #define ElemType int
 
-typedef struct  DNode
- {
+typedef struct  DNode {
 	ElemType data;
 	struct  DNode *prior,*next;
-}DNode ,*DLinkList;
+} DNode ,*DLinkList;
 
 
 int print_menu() ;
@@ -34,4 +33,14 @@ bool print_all(DLinkList ls);
 
 bool input_some_value();
 
+
+DNode* get_Elem(DLinkList dls , int pos);
+
+
+bool print_one(DNode * node);
+
+bool  insert_value(DLinkList ls, int pos,ElemType v);
+
+
+bool delete_node_by_pos(DLinkList ls, int pos);
 #endif

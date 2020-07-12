@@ -10,6 +10,49 @@ int main() {
 }
 
 
+
+
+
+
+bool  insert_value(DLinkList ls, int pos,ElemType v) {
+
+	if(is_empty(dls))
+		return false;
+
+	if(pos<1 )
+		return false;
+
+	DNode  *p = get_Elem(ls,pos);//获取节点
+	DNode  *tmp =  (DNode*)malloc(sizeof(DNode));
+	tmp->data = v;
+
+	tmp->next= p;
+	tmp->prior = p->prior;
+
+	p->prior->next = tmp ;
+	p->prior = tmp;
+
+
+	return true;
+
+
+}
+
+
+
+bool delete_node_by_pos(DLinkList ls, int pos) {
+
+	if(is_empty(ls))return false;
+
+	DNode *p = get_Elem(ls,pos);
+
+	//删除
+	p->next->prior = p->prior;
+	p->prior->next = p->next;
+	free(p);
+	return true;
+}
+
 bool init_list() {
 	dls = (DLinkList)malloc(sizeof(DNode));
 	dls->prior=dls->next=dls;
@@ -77,6 +120,18 @@ bool input_some_value() {
 //	return true;
 //}
 
+
+DNode* get_Elem(DLinkList dls , int pos) {
+
+	DNode * p = dls;//指向第一个
+	int cnt = 0;
+	while(!is_empty(p)&& cnt<pos) {
+		p = p->next;
+		cnt++;
+	}
+	return p;
+}
+
 bool print_all(DLinkList ls) {
 	if(ls->next == ls->prior)
 		return false;
@@ -87,6 +142,14 @@ bool print_all(DLinkList ls) {
 		p=p->next;
 	}
 	cout<<"\n";
+	return true;
+}
+
+
+bool print_one(DNode * node) {
+
+	cout<<node->data<<"\n";
+
 	return true;
 }
 
@@ -114,6 +177,7 @@ int print_menu() {
 
 
 void choose_menu() {
+
 	int user_input,t1,t2,res;
 
 	user_input=print_menu();
@@ -126,28 +190,28 @@ void choose_menu() {
 			case 2:
 				print_all(dls);
 				break;
-//			case 3:
-//				cout<<"what is the rank :\n";
-//				cin>>t1;
-//				print_one(get_Elem(ls,t1));
-//				break;
+			case 3:
+				cout<<"what is the rank :\n";
+				cin>>t1;
+				print_one(get_Elem(dls,t1));
+				break;
 //			case 4:
 //				cout<<"what is the value :\n";
 //				cin>>t2;
 //				print_one(get_Elem_by_value(ls,t2));
 //				break;
-//			case 5:
-//				cout<<"the position you want to insert :\n";
-//				cin>>t1;
-//				cout<<"the value you want to insert :\n";
-//				cin>>t2;
-//				insert_value(ls,t1,t2);
-//				break;
-//			case 6:
-//				cout<<"the position you want to delete :\n";
-//				cin>>t1;
-//				delete_node_by_pos(ls,t1);
-//				break;
+			case 5:
+				cout<<"the position you want to insert :\n";
+				cin>>t1;
+				cout<<"the value you want to insert :\n";
+				cin>>t2;
+				insert_value(dls,t1,t2);
+				break;
+			case 6:
+				cout<<"the position you want to delete :\n";
+				cin>>t1;
+				delete_node_by_pos(dls,t1);
+				break;
 //			case 7:
 //				cout<<size(ls)<<"\n";
 
