@@ -55,7 +55,20 @@ bool delete_value_2_1(LinkList &ls,ElemType v);
 
 bool delete_value_2_2(LinkList &ls,ElemType v);
 
+bool delete_min_(LinkList &ls);
+
+
+bool reverse_list(LinkList &ls);
+
+
 void print_wihout_head(LinkList ls);
+
+void print_test_2_3_(LinkList ls);
+
+
+
+bool sort(LinkList &ls); 
+
 
 #endif
 

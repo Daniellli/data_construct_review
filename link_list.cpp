@@ -13,6 +13,87 @@ int size(LinkList ls) {
 	return cnt;
 }
 
+bool sort(LinkList &ls) {
+
+	if(is_empty(ls)) {
+		return false;
+	}
+	LinkList res;
+
+	init_list(res);
+
+	LNode *p = ls->next,*pre;//p指向第一个节点
+	LNode *r = p->next;//指向后继 第二个节点  保持不断链
+	p->next = NULL;//第一个节点后继节点去掉  r牵着 不会断
+	p = r;//指向第二个
+
+
+	while(p!=NULL) {
+		r=p->next;
+		pre=ls;
+
+		while( pre->next && pre->next->data < p->data)
+			pre=pre->next;
+		p->next = pre->next;
+		pre->next=p;
+		p=r;
+	}
+	return true;;
+}
+
+bool reverse_list(LinkList &ls) {
+
+	if(is_empty(ls))
+		return false;
+	LNode *p=ls->next, *q;
+	ls->next=NULL;
+	while(!is_empty(p)) {
+		q=p->next;//防止断链
+		//头插法
+		p->next=ls->next;
+		ls->next=p;
+		p=q;
+	}
+
+	return true;
+}
+
+bool delete_min_(LinkList &ls) {
+	if(is_empty(ls))return false;
+
+	LNode  *min_front = ls;
+	LNode  *min_node = min_front->next,*explore,*explore_front;
+//指向第二个节点
+	if(min_node->next!=NULL) {//第二节点为空直接删除第一个节点就可以了
+		//第二个节点不为空 遍历寻找最小值
+		explore_front = min_node;
+		explore =min_node->next;
+		//寻找最小值
+		while(explore!=NULL) {
+			//找到更小值
+			if(explore->data < min_node->data) {
+				//改变min_node指向
+				min_front = explore_front;
+				min_node= explore;
+			}
+			//指向下一个
+			explore_front = explore;
+			explore = explore->next;
+		}
+	}
+
+	min_front->next = min_node->next;//删除最小值
+	free(min_node);
+	return true;
+}
+
+void print_test_2_3_(LinkList ls) {
+	if(ls->next!=NULL) {
+		print_test_2_3_(ls->next);
+	}
+	cout<<ls->data<<"\t";
+}
+
 bool delete_node_by_pos(LinkList ls,int pos) {
 
 	if(pos<1)
@@ -239,6 +320,9 @@ int print_menu() {
 	cout<<"表长请输入:7 \n";
 	cout<<"2.1题 请输入8\n";
 	cout<<"2.2题 请输入9\n";
+	cout<<"2.4题 请输入10\n";
+	cout<<"2.5题 请输入11\n";
+	cout<<"sort 请输入12\n";
 
 	cout<<"退出请输入:0 \n";
 
@@ -268,6 +352,9 @@ bool delete_value_2_2(LinkList &ls,ElemType v) {
 
 	return true;
 }
+
+
+
 void choose_menu() {
 	int user_input,t1,t2,res;
 	LinkList ls2=NULL;
@@ -280,11 +367,14 @@ void choose_menu() {
 				break;
 			case 2:
 				print_all(ls);
+				print_test_2_3_(ls);
+				cout<<"\n";
 				break;
 			case 3:
 				cout<<"what is the rank :\n";
 				cin>>t1;
 				print_one(get_Elem(ls,t1));
+
 				break;
 			case 4:
 				cout<<"what is the value :\n";
@@ -324,9 +414,17 @@ void choose_menu() {
 				cout<<"after delete:\n ";
 				print_all(ls);
 				break;
-
-
-
+			case 10:
+				if(delete_min_(ls))
+					cout<< "删除成功\n";
+				else
+					cout<<"删除失败\n";
+				break;
+			case 11:
+				reverse_list(ls);
+				break;
+			case 12:
+				sort(ls);
 		}
 		user_input=print_menu();
 	}
