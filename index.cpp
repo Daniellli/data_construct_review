@@ -11,6 +11,65 @@ int main() {
 	return 0 ;
 }
 
+
+bool get_next(SString p ,int next[]) {
+	int i=1,j=0;//j mean maxMatched
+	next[0]=-1;//result
+	while(i<p.length) {//i 遍历模式串的变量
+		if(j==-1) {//回退到了第一个位置
+			i++;
+			j++;
+			next[i] = j;
+		} else if(p.data[i]==p.data[j]) { //当前变量是否与maxMatched相等 ]
+			//则next[i+1]= j+1
+			j++;
+			i++;
+			next[i]= j;
+		}  else {//回退
+			j = next[j];
+		}
+	}
+	return true;
+}
+
+
+int index(SString S,SString T,int pos) {
+	int i=pos-1,j=0,slen = strLength(S),tlen = strLength(T);
+
+	while(i<slen) {//等于pos < slen-tlen+2 最大有可能是模式串的位置
+		if(S.data[i]== T.data[j]) {
+			i++;
+			j++;
+		} else {
+			i=i-j+1;//回退并进一格
+			j=0;
+		}
+		if(j== tlen) { //匹配成功
+			return i-j; //
+		}
+	}
+	return 0;//匹配失败
+}
+
+
+int index(SString S, SString T, int pos,int next[]) {
+
+	int i=pos-1,j=0,slen = strLength(S),tlen = strLength(T);
+
+	while(i<slen) {//等于pos < slen-tlen+2 最大有可能是模式串的位置
+		if(j == -1 || S.data[i]== T.data[j]) {
+			i++;
+			j++;
+		} else {
+			j=next[j]; // j - move = j - (j-1 - next[j]) = next[j]+1
+		}
+		if(j== tlen) { //匹配成功
+			return i-j; //
+		}
+	}
+	return 0;//匹配失败
+}
+
 bool strEmpty(SString s) {
 	return s.length==0;
 }
@@ -82,7 +141,8 @@ bool strAssign(SString &T,char *chars) {
 	while(chars[i]!='\0') {
 		T.data[T.length++]=chars[i++];
 	}
-	T.data[T.length++]='\0';
+	T.data[T.length]='\0';
+
 }
 /*
 小bug 没有存取分配的最大长度
@@ -111,6 +171,7 @@ void choose_menu() {
 	int user_input,t1,t2,res;
 	char tmp;
 	char * t;
+	int *next;
 	SString str2,str3;
 	user_input=print_menu();
 	while(user_input!=0) {
@@ -174,7 +235,34 @@ void choose_menu() {
 				printOut(str3);
 				free(str3.data);
 				free(str2.data);
-
+				break;
+			case 6:
+				initStr(str2,MaxLen);
+				t = (char*)malloc(sizeof(char)*MaxLen);
+				cout<<"请输入模式串:\n";
+				getchar();
+				gets(t);
+				strAssign(str2,t);
+				free(t);
+				//求解next数组
+				next = (int*)malloc(sizeof(int)*(str2.length));//存储结果
+				memset(next,0,sizeof(int)*(str2.length));
+				get_next(str2,next);
+				//模式匹配
+				cout<<"pos:\n";
+				cin>>t1;
+				cout<<index(str,str2,t1,next);
+				break;
+			case 7:
+				//test
+				next = (int*)malloc(sizeof(int)*(str.length));//存储结果
+				memset(next,0,sizeof(int)*(str.length));
+				get_next(str,next);
+				for(int i = 0; i<str.length; i++) {
+					cout<<next[i]<<"\t";
+				}
+				cout<<"\n";
+				free(next);
 				break;
 		}
 		user_input=print_menu();
@@ -193,6 +281,8 @@ int print_menu() {
 	cout<<"比较请输入:3 \n";
 	cout<<"求子串请输入:4 \n";
 	cout<<"连接两个串请输入:5 \n";
+	cout<<"模式匹配请输入6 \n";
+
 	cout<<"退出请输入:0 \n";
 
 	for(int i = 0 ; i<=30; i++)
